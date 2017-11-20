@@ -54,6 +54,7 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
+// Chat Channel
 let chatChannel = socket.channel("chat:chat", {})
 let chatInput = document.querySelector("#chat-input")
 let chatSubmit = document.querySelector("#chat-submit")
@@ -74,7 +75,21 @@ chatChannel.on("msg", payload => {
 })
 
 chatChannel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+  .receive("ok", resp => { console.log("Joined Chat Channel successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join chat channel", resp) })
+
+let githubChannel = socket.channel("github:updates", {})
+let updateList = document.querySelect("#updates")
+
+githubChannel.join()
+  .receive("ok", resp => { console.log("Github Channel joined successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join github channel", resp) })
+
+githubChannel.on("update", payload => {
+  let status = document.createElement("li")
+  status.className = "list-group-item status";
+  status.innerText = `${payload.body}`
+  updateList.appendChild(status)
+})
 
 export default socket

@@ -2,7 +2,11 @@ defmodule GithubStatusChatWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
+  # Chat Channel
   channel "chat:*", GithubStatusChatWeb.ChatChannel
+  # Github Status Channel
+  channel "github:*", GithubStatusChatWeb.GithubChannel
+  
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
