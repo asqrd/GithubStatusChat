@@ -1,20 +1,13 @@
 # GithubStatusChat
 
-To start your Phoenix server:
+Phoenix Application Demo for Kiuni that does the following:
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+1. Checks every github status every 1 - 5 minutes
+2. Saves the response in database with columns: HTTP Status Code, Message, Time request happened upon success
+3. Broadcasts Status to a channel, updating only upon status change.
+4. Channel that broadcasts to all channels data entered by user.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Notes: 
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+For brevity Javascript for channels will be global, as their will only be one endpoint for both channels.
+Testing will be minimal (again for brevity)
