@@ -2,7 +2,11 @@
   <div class="col-md-6">
     <h2 class="chat-header">Welcome to Chat</h2>
 
+    <ul class="list-group" id="messages" >
+    </ul>
+
     <input name="chat-input" id="chat-input" type="text"></input>
+    <input id="chat-submit" class="btn btn-success" type="submit">
   </div>
 
   <div class="col-md-6">

@@ -1,7 +1,7 @@
 defmodule GithubStatusChatWeb.ChatFeatureTest do
   use GithubStatusChatWeb.FeatureCase, async: true
 
-  import Wallaby.Query, only: [css: 2, css: 1, text_field: 1]
+  import Wallaby.Query, only: [css: 2, css: 1, text_field: 1, button: 1]
 
   test "chat page has header for chat", %{session: session} do
     session
@@ -19,6 +19,7 @@ defmodule GithubStatusChatWeb.ChatFeatureTest do
     session
     |> visit("/")
     |> fill_in(text_field("chat-input"), with: "Hello")
-    |> assert_has(css(".message", text: "Hello"))
+    |> click(button("chat-submit"))
+    |> assert_has(css("#messages > .message", text: "Hello"))
   end
 end
