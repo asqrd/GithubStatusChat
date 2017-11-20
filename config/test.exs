@@ -1,10 +1,12 @@
 use Mix.Config
 
-# We don't run a server during test. If one is required,
-# you can enable the server option below.
+# Run a server during testing for wallaby
 config :github_status_chat, GithubStatusChatWeb.Endpoint,
   http: [port: 4001],
-  server: false
+  server: true
+
+# Enable SQL Sandbox for wallaby tests
+config :github_status_chat, :sql_sandbox, true
 
 # Print only warnings and errors during test
 config :logger, level: :warn

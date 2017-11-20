@@ -11,6 +11,11 @@ defmodule GithubStatusChatWeb.Endpoint do
     at: "/", from: :github_status_chat, gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
+  # Sandbox mode for Wallaby
+  if Application.get_env(:github_status_chat, :sql_sandbox) do
+    plug Phoenix.Ecto.SQL.Sandbox
+  end
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
