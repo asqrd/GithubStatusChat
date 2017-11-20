@@ -1,6 +1,6 @@
 # Setting up Wallaby for testing
 {:ok, _} = Application.ensure_all_started(:wallaby)
-Application.put_env(:wallaby, :base_url, GithubStatusChat.Endpoint.url)
+Application.put_env(:wallaby, :base_url, GithubStatusChatWeb.Endpoint.url)
 
 ExUnit.start()
 
