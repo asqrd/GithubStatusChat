@@ -82,13 +82,17 @@ let githubChannel = socket.channel("github:updates", {})
 let updateList = document.querySelector("#updates")
 
 githubChannel.join()
-  .receive("ok", resp => { console.log("Github Channel joined successfully", resp) })
+  .receive("ok", resp => { 
+    console.log("Github Channel joined successfully", resp);
+    githubChannel.push("first", {})
+  })
   .receive("error", resp => { console.log("Unable to join github channel", resp) })
 
 githubChannel.on("update", payload => {
   let status = document.createElement("li")
   status.className = "list-group-item status";
-  status.innerText = `${payload.body}`
+  status.innerText = `Message: ${payload.body.message} Status: ${payload.status_code}`
+  console.log(payload)
   updateList.appendChild(status)
 })
 

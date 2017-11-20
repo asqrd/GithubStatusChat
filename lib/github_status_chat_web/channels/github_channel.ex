@@ -5,8 +5,16 @@ defmodule GithubStatusChatWeb.GithubChannel do
     {:ok, socket}
   end
 
-  def handle_in(socket, "update", %{"body" => body}, socket) do
-    broadcast!(socket, "update", %{body: body})
+  # Called when github status is updated
+  def handle_in("update", %{"body" => body, "status_code" => status_code, "time" => time}, socket) do
+    broadcast!(socket, "update", %{body: body, status: status_code})
+
+    {:noreply, socket}
+  end
+
+  def handle_in("first", %{}, socket) do
+    broadcast!(socket, "update", %{body: %{message: "blah"}, status_code: 200})
+
     {:noreply, socket}
   end
 end

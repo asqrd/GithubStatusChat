@@ -12,10 +12,37 @@ defmodule GithubStatusChatWeb.GithubStatusWorker do
   end
 
   def handle_info(:update, state) do
+    # Get Github Status
     resp = HTTPoison.get!("https://api.github.com/status")
-    GithubStatusChatWeb.Endpoint.broadcast("github:updates", "update", %{body: "Github called"})
+    time = Time.utc_now()
+
+    # Parse response
+    {body, status_code} = parse_response(resp)
+
+    state = Map.put(state, :status_code, status_code)
+    state = Map.put(state, :body, body)
+    state = Map.put(state, :time, time)
+    call_channel(state)
+
+
+    # Reschedule process
     schedule_work()
     {:noreply, state}
+  end
+
+  defp parse_response(resp) do
+    # decode response body
+    {:ok, body} = Poison.decode(resp.body)
+
+     status_code = resp.status_code
+
+    {body, status_code}
+  end
+
+  defp call_channel(state) do
+
+    # Broadcast decoded response to channel
+    GithubStatusChatWeb.Endpoint.broadcast("github:updates", "update", %{body: state.body, status_code: state.status_code, time: state.time})
   end
 
   defp schedule_work() do
