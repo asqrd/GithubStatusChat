@@ -11,3 +11,5 @@ Notes:
 
 For brevity Javascript for channels will be global, as their will only be one endpoint for both channels.
 Testing will be minimal (again for brevity)
+PhantomJS is required in order to run tests, as I am using Wallaby. Please see Wallaby documentation for details:
+https://github.com/keathley/wallaby
