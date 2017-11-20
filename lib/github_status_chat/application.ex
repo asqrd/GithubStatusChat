@@ -14,6 +14,7 @@ defmodule GithubStatusChat.Application do
       supervisor(GithubStatusChatWeb.Endpoint, []),
       # Start your own worker by calling: GithubStatusChat.Worker.start_link(arg1, arg2, arg3)
       # worker(GithubStatusChat.Worker, [arg1, arg2, arg3]),
+      worker(GithubStatusChatWeb.GithubStatusWorker, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

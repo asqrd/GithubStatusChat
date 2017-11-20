@@ -1,7 +1,7 @@
 defmodule GithubStatusChatWeb.GithubChannel do
   use Phoenix.Channel
 
-  def join("github:update", _message, socket) do
+  def join("github:updates", _message, socket) do
     {:ok, socket}
   end
 

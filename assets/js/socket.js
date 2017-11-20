@@ -79,7 +79,7 @@ chatChannel.join()
   .receive("error", resp => { console.log("Unable to join chat channel", resp) })
 
 let githubChannel = socket.channel("github:updates", {})
-let updateList = document.querySelect("#updates")
+let updateList = document.querySelector("#updates")
 
 githubChannel.join()
   .receive("ok", resp => { console.log("Github Channel joined successfully", resp) })
