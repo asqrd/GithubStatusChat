@@ -79,21 +79,25 @@ chatChannel.join()
   .receive("error", resp => { console.log("Unable to join chat channel", resp) })
 
 let githubChannel = socket.channel("github:updates", {})
-let updateList = document.querySelector("#updates")
+let status = document.querySelector(".github-status")
 
 githubChannel.join()
   .receive("ok", resp => { 
     console.log("Github Channel joined successfully", resp);
-    githubChannel.push("first", {})
+    githubChannel.push("joined", {});
   })
   .receive("error", resp => { console.log("Unable to join github channel", resp) })
 
+// For Github Status call updates
 githubChannel.on("update", payload => {
-  let status = document.createElement("li")
-  status.className = "list-group-item status";
-  status.innerText = `Message: ${payload.body.message} Status: ${payload.status_code}`
-  console.log(payload)
-  updateList.appendChild(status)
-})
+  status.innerText = `Message: ${payload.message} Status: ${payload.status_code}`
+  console.log("Update: " + payload)
+});
+
+// Set up First Github Status
+githubChannel.on("first", payload => {
+  status.innerText = `Message: ${payload.message} Status: ${payload.status_code}`
+  console.log("First: " + payload)
+});
 
 export default socket

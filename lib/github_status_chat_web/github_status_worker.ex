@@ -1,12 +1,14 @@
 defmodule GithubStatusChatWeb.GithubStatusWorker do
   use GenServer
+  alias GithubStatusChat.Github
+  require Logger
 
   def start_link do
     GenServer.start_link(__MODULE__, %{})
   end
 
   def init(state) do
-    HTTPoison.start
+    HTTPoison.start()
     schedule_work()
     {:ok, state}
   end
@@ -14,15 +16,33 @@ defmodule GithubStatusChatWeb.GithubStatusWorker do
   def handle_info(:update, state) do
     # Get Github Status
     resp = HTTPoison.get!("https://api.github.com/status")
-    time = Time.utc_now()
+    time = Time.to_string(Time.utc_now())
 
     # Parse response
     {body, status_code} = parse_response(resp)
 
-    state = Map.put(state, :status_code, status_code)
-    state = Map.put(state, :body, body)
-    state = Map.put(state, :time, time)
-    call_channel(state)
+    message = body["message"]
+
+
+    # Cache response
+    state =
+      Map.put(state, :status_code, status_code)
+    |> Map.put(:message, message)
+    |> Map.put(:time, time)
+
+    # Compare state to last response
+    # Check if status calls are empty
+    if is_nil(List.last(Github.list_status_calls())) do
+      Github.create_status_call(%{message: state.message, time: state.time, status_code: state.status_code})
+      call_channel(state)
+    else
+      last_status_call = List.last(Github.list_status_calls())
+      if last_status_call.status_code != state.status_code do
+
+        call_channel(state)
+      end 
+      Github.create_status_call(%{message: state.message, time: state.time, status_code: state.status_code})
+    end
 
 
     # Reschedule process
@@ -42,7 +62,7 @@ defmodule GithubStatusChatWeb.GithubStatusWorker do
   defp call_channel(state) do
 
     # Broadcast decoded response to channel
-    GithubStatusChatWeb.Endpoint.broadcast("github:updates", "update", %{body: state.body, status_code: state.status_code, time: state.time})
+    GithubStatusChatWeb.Endpoint.broadcast("github:updates", "update", %{message: state.message, status_code: state.status_code, time: state.time})
   end
 
   defp schedule_work() do
