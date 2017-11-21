@@ -68,7 +68,7 @@ defmodule GithubStatusChatWeb.GithubStatusWorker do
   defp schedule_work() do
     time_to_call = :rand.uniform(5) # Erlang module to provide random number
     # Schedule github api call every 1 - 5 minutes
-    Process.send_after(self(), :update, time_to_call * 1000)
+    Process.send_after(self(), :update, time_to_call * 60 * 1000)
   end
 
 end
