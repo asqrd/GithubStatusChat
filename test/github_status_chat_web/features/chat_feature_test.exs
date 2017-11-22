@@ -1,5 +1,5 @@
 defmodule GithubStatusChatWeb.ChatFeatureTest do
-  use GithubStatusChatWeb.FeatureCase, async: true
+  use GithubStatusChatWeb.FeatureCase, async: false
 
   import Wallaby.Query, only: [css: 2, css: 1, text_field: 1, button: 1]
 
