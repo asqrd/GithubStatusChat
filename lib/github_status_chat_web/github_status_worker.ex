@@ -32,22 +32,30 @@ defmodule GithubStatusChatWeb.GithubStatusWorker do
 
     # Compare state to last response
     # Check if status calls are empty
-    if is_nil(List.last(Github.list_status_calls())) do
-      Github.create_status_call(%{message: state.message, time: state.time, status_code: state.status_code})
-      call_channel(state)
-    else
-      last_status_call = List.last(Github.list_status_calls())
-      if last_status_call.status_code != state.status_code do
-
-        call_channel(state)
-      end 
-      Github.create_status_call(%{message: state.message, time: state.time, status_code: state.status_code})
+    case Github.get_last_or_nil_status_call do
+      {:error, nil} -> create_first_status_call(state)
+      {:ok, status_call} -> compare_status_code(status_call, state)
     end
-
 
     # Reschedule process
     schedule_work()
     {:noreply, state}
+  end
+
+  defp create_first_status_call(state) do
+    create_status_call(state)
+    call_channel(state)
+  end
+
+  defp create_status_call(state) do
+    Github.create_status_call(%{message: state.message, status_code: state.status_code, time: state.time})
+  end
+
+  defp compare_status_code(last, state) do
+    if state.status_code != last.status_code do
+      call_channel(state)
+    end
+    create_status_call(state)
   end
 
   defp parse_response(resp) do

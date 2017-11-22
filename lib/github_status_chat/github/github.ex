@@ -22,6 +22,30 @@ defmodule GithubStatusChat.Github do
   end
 
   @doc """
+  Gets the last status_call or nil.
+
+  ## Examples
+    
+    iex> get_last_or_nil_status_call()
+    {:ok, %StatusCall{}}
+
+    iex> get_last_or_nil_status_call()
+    {:error, nil}
+
+  """
+
+  def get_last_or_nil_status_call do
+    status_call = 
+      list_status_calls()
+      |> List.last()
+
+    case is_nil(status_call) do
+      true -> {:error, nil}
+      false -> {:ok, status_call}
+    end
+  end
+
+  @doc """
   Gets a single status_call.
 
   Raises `Ecto.NoResultsError` if the Status call does not exist.
