@@ -84,7 +84,6 @@ let status = document.querySelector(".github-status")
 githubChannel.join()
   .receive("ok", resp => { 
     console.log("Github Channel joined successfully", resp);
-    githubChannel.push("joined", {});
   })
   .receive("error", resp => { console.log("Unable to join github channel", resp) })
 
