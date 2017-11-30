@@ -35,9 +35,10 @@ defmodule GithubStatusChat.Github do
   """
 
   def get_last_or_nil_status_call do
-    status_call = 
-      list_status_calls()
-      |> List.last()
+      query = 
+        from s in StatusCall, order_by: [desc: :inserted_at], limit: 1
+
+    status_call = Repo.all(query)
 
     case is_nil(status_call) do
       true -> {:error, nil}

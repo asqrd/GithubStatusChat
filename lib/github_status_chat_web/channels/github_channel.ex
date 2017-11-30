@@ -16,7 +16,7 @@ defmodule GithubStatusChatWeb.GithubChannel do
   # Called when channel joined
   def handle_in("joined", %{}, socket) do
     case Github.get_last_or_nil_status_call do
-      {:error, nil} -> broadcast!(socket, "first", ${message: "Pending", status: "Pending"})
+      {:error, nil} -> broadcast!(socket, "first", %{message: "Pending", status: "Pending"})
       {:ok, status} -> broadcast!(socket, "first", %{message: status.message, status_code: status.status_code})
     end
 
