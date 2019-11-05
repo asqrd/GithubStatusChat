@@ -1,6 +1,6 @@
 # GithubStatusChat
 
-Phoenix Application Demo for Kiuni that does the following:
+Phoenix Application Demo for a technical interview that does the following:
 
 1. Checks every github status every 1 - 5 minutes
 2. Saves the response in database with columns: HTTP Status Code, Message, Time request happened upon success
